@@ -2,6 +2,9 @@
 
 ## see: https://youtu.be/aqXSbDZggK4
 
+## Use a local env file to control the install process
+[ -f $PWD/env.sh ] && source $PWD/env.sh
+
 ## Default variables to use
 export INTERACTIVE=${INTERACTIVE:="true"}
 export PVS=${INTERACTIVE:="true"}
@@ -85,7 +88,7 @@ echo "******"
 yum update -y
 
 # install the following base packages
-yum install -y  wget git zile nano net-tools docker-1.13.1\
+yum install -y  wget git zile nano net-tools docker-1.13.1 \
 				bind-utils iptables-services \
 				bridge-utils bash-completion \
 				kexec-tools sos psacct openssl-devel \
