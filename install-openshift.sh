@@ -148,9 +148,9 @@ systemctl enable docker
 
 if [ ! -f ~/.ssh/id_rsa ]; then
 	ssh-keygen -q -f ~/.ssh/id_rsa -N ""
-	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-	ssh -o StrictHostKeyChecking=no root@$IP "pwd" < /dev/null
 fi
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+ssh -o StrictHostKeyChecking=no root@$IP "pwd" < /dev/null
 
 export METRICS="True"
 export LOGGING="True"
