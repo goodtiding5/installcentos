@@ -125,18 +125,22 @@ EOD
 if [ -z $DISK ]; then 
 	echo "Not setting the Docker storage."
 else
-	cp /etc/sysconfig/docker-storage-setup /etc/sysconfig/docker-storage-setup.bk
+	# Make sure it only get initialized once
+	grep "VG=DOCKER" /etc/sysconfig/docker-storage-setup > /dev/null
+	if [ $? = 1 ]; then
+		cp /etc/sysconfig/docker-storage-setup /etc/sysconfig/docker-storage-setup.bk
 
-	echo DEVS=$DISK > /etc/sysconfig/docker-storage-setup
-	echo VG=DOCKER >> /etc/sysconfig/docker-storage-setup
-	echo SETUP_LVM_THIN_POOL=yes >> /etc/sysconfig/docker-storage-setup
-	echo DATA_SIZE="100%FREE" >> /etc/sysconfig/docker-storage-setup
+		echo DEVS=$DISK > /etc/sysconfig/docker-storage-setup
+		echo VG=DOCKER >> /etc/sysconfig/docker-storage-setup
+		echo SETUP_LVM_THIN_POOL=yes >> /etc/sysconfig/docker-storage-setup
+		echo DATA_SIZE="100%FREE" >> /etc/sysconfig/docker-storage-setup
 
-	systemctl stop docker
+		systemctl stop docker
 
-	rm -rf /var/lib/docker
-	wipefs --all $DISK
-	docker-storage-setup
+		rm -rf /var/lib/docker
+		wipefs --all $DISK
+		docker-storage-setup
+	fi
 fi
 
 systemctl restart docker
